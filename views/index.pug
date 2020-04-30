@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  p
+    a.button(href="/books/new") Create New Book
+  form(action="/books/search", method="GET")
+      p
+        input(type="text", name="search" class="search-fld")
+        input(type="submit"  value="Search" class="search-btn")
+  table
+    thead
+      tr
+        th Title
+        th Author
+        th Genre
+        th Year
+    tbody
+      each book in books
+        tr
+          td
+            a(href="/books/" + book.id)= book.title
+          td= book.author
+          td= book.genre
+          td= book.year
