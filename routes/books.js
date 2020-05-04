@@ -30,11 +30,11 @@ router.post('/new', asyncHandler(async (req, res) => {
     let book;
     try {
         book = await Book.create(req.body);
-        res.redirect("/books/");
+        res.redirect("/books");
     }   catch(error) {
         if(error.name === "SequelizeValidationError") { // checking the error
             book = await Book.build(req.body);
-            res.render('new-book', { book, error: error.errors, title: 'New Book' });
+            res.render('new-book', { book, errors: error.errors, title: 'New Book' })
         } else {
             throw error;
         }
@@ -47,7 +47,7 @@ router.get('/:id', asyncHandler(async (req, res) => {
     if(book) {
         res.render('update-book', { book, title: 'Update Book' });
     } else {
-        res.sendStatus(404);
+        res.render("error", {title: '500 Internal Server Error'});
     }
 }));
 
@@ -66,7 +66,7 @@ router.post('/:id', asyncHandler(async (req, res) => {
         if(error.name === "SequelizeValidationError") { // checking the error
             book = await Book.build(req.body);
             book.id = req.params.id; // make sure correct book gets updated
-            res.render('update-book', { books, error: error.errors, title: 'Update Book' });
+            res.render('update-book', { book, errors: error.errors, title: 'Update Book' })
         } else {
             throw error;
         }
